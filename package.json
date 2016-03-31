@@ -1,0 +1,32 @@
+{
+  "name": "kalm-websocket",
+  "version": "1.0.0",
+  "description": "A web-socket adapter for kalm",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fed135/kalm-websocket.git"
+  },
+  "keywords": [
+    "socket.io",
+    "socket",
+    "io",
+    "websocket",
+    "web",
+    "browser",
+    "kalm"
+  ],
+  "author": "frederic charette <fredericcharette@gmail.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/fed135/kalm-websocket/issues"
+  },
+  "homepage": "https://github.com/fed135/kalm-websocket#readme",
+  "dependencies": {
+    "socket.io": "1.4.x",
+    "socket.io-client": "^1.4.5"
+  }
+}
