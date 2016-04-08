@@ -1,10 +1,10 @@
 {
   "name": "kalm-websocket",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A web-socket adapter for kalm",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha tests/index.js"
   },
   "repository": {
     "type": "git",
@@ -28,5 +28,10 @@
   "dependencies": {
     "socket.io": "1.4.x",
     "socket.io-client": "^1.4.5"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "kalm": "^0.1.2",
+    "mocha": "^2.4.5"
   }
 }

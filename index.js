@@ -47,7 +47,12 @@ function send(socket, payload) {
  * @param {function} callback The success callback for the operation
  */
 function stop(server, callback) {
-	server.listener.close(callback || function() {});
+	server.connections.forEach(function _killConnection(e) {
+		e.socket.disconnect();
+	});
+	server.connections.length = 0;
+	server.listener.close();
+	callback();
 }
 
 /**
@@ -58,7 +63,8 @@ function stop(server, callback) {
  */
 function createSocket(client, socket) {
 	if (!socket) {
-		socket = SocketIOClient.connect(client.options.hostname);
+		console.log('connecting to ' + client.options.hostname);
+		socket = SocketIOClient.connect(client.options.hostname+':'+client.options.port);
 	}
 
 	socket.on('message', client._handleRequest.bind(client));
@@ -69,11 +75,21 @@ function createSocket(client, socket) {
 	return socket;
 }
 
+/**
+ * Attempts to disconnect the socket
+ * @method disconnect
+ * @param {Socket} socket The socket to disconnect
+ */
+function disconnect(socket) {
+	if (socket.disconnect) socket.disconnect();
+}
+
 /* Exports -------------------------------------------------------------------*/
 
 module.exports = {
 	listen: listen,
 	send: send,
 	createSocket: createSocket,
-	stop: stop
+	stop: stop,
+	disconnect: disconnect
 };
