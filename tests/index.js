@@ -38,14 +38,14 @@ describe('Adapters', function() {
 
 	describe('Smoke test', function() {
 		it('run ws + json', function(done) {
-			var server = new Kalm.Server({adapter:'ws', port:8000});
+			var server = new Kalm.Server({encoder: 'json', adapter:'ws', port:8000});
 			server.channel('test', function(data) {
 				assert.deepEqual(data, {foo:'bar'});
 				server.stop(done);
 			});
 
 			server.on('ready', function() {
-				var client = new Kalm.Client({adapter:'ws', port:8000, hostname:'http://0.0.0.0'});
+				var client = new Kalm.Client({encoder: 'json', adapter:'ws', port:8000, hostname:'http://0.0.0.0'});
 				client.send('test', {foo:'bar'});
 			});
 		});

@@ -27,7 +27,7 @@ function listen(server, callback) {
 		server.emit('error', err);
 	});
 
-	process.nextTick(callback);
+	callback();
 }
 
 /**

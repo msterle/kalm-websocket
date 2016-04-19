@@ -1,10 +1,11 @@
 {
   "name": "kalm-websocket",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A web-socket adapter for kalm",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests/index.js"
+    "test": "mocha tests/index.js",
+    "build": "webpack  -p -d -j --define process.env.NODE_ENV='\"browser\"' --config ./webpack.config"
   },
   "repository": {
     "type": "git",
@@ -27,11 +28,11 @@
   "homepage": "https://github.com/fed135/kalm-websocket#readme",
   "dependencies": {
     "socket.io": "1.4.x",
-    "socket.io-client": "^1.4.5"
+    "socket.io-client": "1.4.x"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "kalm": "^0.1.2",
-    "mocha": "^2.4.5"
+    "chai": "3.5.x",
+    "kalm": "0.2.x",
+    "mocha": "2.4.x"
   }
 }
