@@ -8,8 +8,13 @@
 
 /* Requires ------------------------------------------------------------------*/
 
-var SocketIO = require('socket.io');
 var SocketIOClient = require('socket.io-client');
+var SocketIO;
+
+if (process.env.NODE_ENV !== 'browser') {
+	SocketIO = require('socket.io');
+}
+
 
 /* Methods -------------------------------------------------------------------*/
 
@@ -23,7 +28,7 @@ function listen(server, callback) {
 	server.listener = SocketIO(server.options.port);
 
 	server.listener.on('connection', server._handleRequest.bind(server));
-	server.listener.on('error', function _handleServerError(err) {
+	server.listener.on('error', (err) => {
 		server.emit('error', err);
 	});
 
@@ -47,9 +52,7 @@ function send(socket, payload) {
  * @param {function} callback The success callback for the operation
  */
 function stop(server, callback) {
-	server.connections.forEach(function _killConnection(e) {
-		e.socket.disconnect();
-	});
+	server.connections.forEach(disconnect);
 	server.connections.length = 0;
 	server.listener.close();
 	callback();
@@ -63,13 +66,17 @@ function stop(server, callback) {
  */
 function createSocket(client, socket) {
 	if (!socket) {
-		console.log('connecting to ' + client.options.hostname);
 		socket = SocketIOClient.connect(client.options.hostname+':'+client.options.port);
 	}
 
 	socket.on('message', client._handleRequest.bind(client));
-	socket.on('error', function _handleSocketError(err) {
+
+	socket.on('error', (err) => {
 		client.emit('error', err);
+	});
+
+	socket.on('connect', () => {
+		client.emit('connect');
 	});
 
 	return socket;
