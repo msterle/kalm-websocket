@@ -1,7 +1,6 @@
 /**
  * WebSocket Adapter
- * @adapter ws
- * @exports {object}
+ * @module adapters/ws
  */
 
 'use strict';
@@ -20,7 +19,6 @@ if (process.env.NODE_ENV !== 'browser') {
 
 /**
  * Listens for WebSocket connections on the selected port.
- * @method listen
  * @param {Server} server The Kalm Server reference
  * @param {function} callback The success callback for the operation
  */
@@ -37,7 +35,6 @@ function listen(server, callback) {
 
 /**
  * Sends a message with a socket client
- * @method send
  * @param {Socket} socket The socket to use
  * @param {Buffer} payload The body of the request
  */
@@ -47,7 +44,6 @@ function send(socket, payload) {
 
 /**
  * Stops listening for WebSocket connections and closes the Server.
- * @method stop
  * @param {Server} server The Kalm Server reference
  * @param {function} callback The success callback for the operation
  */
@@ -58,7 +54,6 @@ function stop(server, callback) {
 
 /**
  * Creates a client
- * @method createSocket
  * @param {Client} client The client to create the socket for
  * @returns {Socket} The created WebSocket client
  */
@@ -78,7 +73,6 @@ function createSocket(client, socket) {
 
 /**
  * Attempts to disconnect the socket
- * @method disconnect
  * @param {Socket} socket The socket to disconnect
  */
 function disconnect(socket) {
