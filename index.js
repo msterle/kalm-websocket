@@ -18,6 +18,20 @@ if (process.env.NODE_ENV !== 'browser') {
 /* Methods -------------------------------------------------------------------*/
 
 /**
+ * Converts ArrayBuffers to Buffers (cycle)
+ * @param {ArrayBuffer} ab The ArrayBuffer to convert
+ * @returns {Buffer} The resulting Buffer
+ */
+function abToBuffer(ab) {
+	let buffer = new Buffer(ab.byteLength || ab.data.length);
+	let view = ab.data || new Uint8Array(ab);
+	for (let i = 0; i < buffer.length; i++) {
+		buffer[i] = view[i];
+	}
+	return buffer;
+}
+
+/**
  * Listens for WebSocket connections on the selected port.
  * @param {Server} server The Kalm Server reference
  * @param {function} callback The success callback for the operation
@@ -49,7 +63,7 @@ function send(socket, payload) {
  */
 function stop(server, callback) {
 	server.listener.close();
-	return callback();
+	process.nextTick(callback);
 }
 
 /**
@@ -62,7 +76,9 @@ function createSocket(client, socket) {
 		socket = SocketIOClient.connect(client.options.hostname+':'+client.options.port);
 	}
 
-	socket.on('message', client.handleRequest.bind(client));
+	socket.on('message', (evt) => {
+		client.handleRequest(abToBuffer(evt));	// Browser ArrayBuffer to node Buffer
+	});
 
 	socket.on('error', client.handleError.bind(client));
 
@@ -75,8 +91,11 @@ function createSocket(client, socket) {
  * Attempts to disconnect the socket
  * @param {Socket} socket The socket to disconnect
  */
-function disconnect(socket) {
-	if (socket.disconnect) socket.disconnect();
+function disconnect(client) {
+	if (client.socket && client.socket.disconnect) {
+		client.socket.disconnect();
+		process.nextTick(client.handleDisconnect.bind(client));
+	}
 }
 
 /* Exports -------------------------------------------------------------------*/

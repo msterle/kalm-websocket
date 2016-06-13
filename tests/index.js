@@ -7,7 +7,8 @@
 /* Requires ------------------------------------------------------------------*/
 
 var assert = require('chai').assert;
-var Kalm = require('kalm');
+//var Kalm = require('kalm');
+var Kalm = require('/home/frederic/Documents/workspace/Kalm');
 var websocket = require('../index');
 
 /* Models --------------------------------------------------------------------*/
@@ -39,26 +40,13 @@ describe('Adapters', function() {
 	describe('Smoke test', function() {
 		it('run ws + json', function(done) {
 			var server = new Kalm.Server({encoder: 'json', adapter:'ws', port:8000});
-			server.channel('test', function(data) {
+			server.subscribe('test', function(data) {
 				assert.deepEqual(data, {foo:'bar'});
 				server.stop(done);
 			});
 
 			server.on('ready', function() {
 				var client = new Kalm.Client({encoder: 'json', adapter:'ws', port:8000, hostname:'http://0.0.0.0'});
-				client.send('test', {foo:'bar'});
-			});
-		});
-
-		it('run ws + msg-pack', function(done) {
-			var server = new Kalm.Server({encoder: 'msg-pack',adapter:'ws', port:8000});
-			server.channel('test', function(data) {
-				assert.deepEqual(data, {foo:'bar'});
-				server.stop(done);
-			});
-
-			server.on('ready', function() {
-				var client = new Kalm.Client({encoder: 'msg-pack',adapter:'ws', port:8000, hostname:'http://0.0.0.0'});
 				client.send('test', {foo:'bar'});
 			});
 		});

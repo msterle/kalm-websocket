@@ -1,10 +1,10 @@
 # kalm-websocket
 
-Web-socket adapter for Kalm
+Web-socket adapter for [Kalm](https://github.com/fed135/Kalm)
 
-[![Kalm](https://img.shields.io/npm/v/kalm.svg)](https://www.npmjs.com/package/kalm)
+[![kalm-websocket](https://img.shields.io/npm/v/kalm-websocket.svg)](https://www.npmjs.com/package/kalm-websocket)
 [![Build Status](https://travis-ci.org/fed135/kalm-websocket.svg?branch=master)](https://travis-ci.org/fed135/kalm-websocket)
-[![Dependencies Status](https://david-dm.org/fed135/Kalm.svg)](https://www.npmjs.com/package/kalm)
+[![Dependencies Status](https://david-dm.org/fed135/kalm-websocket.svg)](https://www.npmjs.com/package/kalm-websocket)
 
 ## Usage
 
@@ -18,7 +18,6 @@ Using with Kalm:
     var server = new Kalm.Server({
 	    port: 3000,
 	    adapter: 'ws',
-	    encoder: 'msg-pack',
 	    channels: {
 		    '/': function(data) {
 			    console.log('GOT "' + data + '" on main channel!');
@@ -40,7 +39,6 @@ Using in your browser:
 	    hostname: 'http://127.0.0.1',	// Put your server addr
 	    port: 3000,
 	    adapter: 'ws',
-	    encoder: 'msg-pack',
 	    channels: {
 		    '/': function(data) {
 			    console.log('GOT "' + data + '" on main channel!');
