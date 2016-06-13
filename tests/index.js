@@ -7,8 +7,7 @@
 /* Requires ------------------------------------------------------------------*/
 
 var assert = require('chai').assert;
-//var Kalm = require('kalm');
-var Kalm = require('/home/frederic/Documents/workspace/Kalm');
+var Kalm = require('kalm');
 var websocket = require('../index');
 
 /* Models --------------------------------------------------------------------*/
