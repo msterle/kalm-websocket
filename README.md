@@ -17,6 +17,7 @@
 
 Using with Kalm:
 
+```node
     const Kalm = require('kalm');
     const ws = require('kalm-websocket');
     
@@ -31,10 +32,11 @@ Using with Kalm:
 		    }
 		  }
     });
-
+```
 
 Using in your browser:
 
+```node
     // Install kalm and kalm-websocket via a package manager (recommended).
 		 
     const Kalm = require('kalm');
@@ -52,5 +54,5 @@ Using in your browser:
 		    }
 		  }
     });
-
+```
     
