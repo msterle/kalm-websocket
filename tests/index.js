@@ -40,7 +40,6 @@ describe('Adapters', () => {
 		it('run ws + json', (done) => {
 			let server = new Kalm.Server({ adapter:'ws', port:8000 });
 			server.subscribe('test', (data) => {
-				console.log(data);
 				assert.deepEqual(data, {foo:'bar'});
 				server.stop(done);
 			});

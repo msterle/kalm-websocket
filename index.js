@@ -7,7 +7,9 @@
 
 /* Requires ------------------------------------------------------------------*/
 
-const ws = require('uws');
+const is_browser = (require('os').platform() === 'browser');
+
+const ws = (is_browser)?require('./lib/ws-browser'):require('uws');
 
 /* Methods -------------------------------------------------------------------*/
 
@@ -32,14 +34,14 @@ function _abToBuffer(ab) {
  * @param {function} callback The success callback for the operation
  */
 function listen(server, callback) {
-	server.listener = new ws.Server(server.options.port);
+	server.listener = new ws.Server({
+		port: server.options.port
+	}, callback);
 
 	server.listener.on('connection', server.handleRequest.bind(server));
 	server.listener.on('error', (err) => {
 		server.emit('error', err);
 	});
-
-	callback();
 }
 
 /**
@@ -48,7 +50,8 @@ function listen(server, callback) {
  * @param {Buffer} payload The body of the request
  */
 function send(socket, payload) {
-	socket.send(payload);
+	if (socket.sendBytes) socket.sendBytes(payload);
+	else socket.send(payload, { binary: true });
 }
 
 /**
@@ -69,16 +72,31 @@ function stop(server, callback) {
 function createSocket(client, socket) {
 	if (!socket) {
 		socket = new ws('ws://' + client.options.hostname + ':' + client.options.port);
+		if (is_browser) socket.binaryType = "arraybuffer";
 	}
 
-	socket.on('message', (evt) => {
-		console.log(evt);
-		client.handleRequest(_abToBuffer(evt));	// Browser ArrayBuffer to node Buffer
-	});
+	if (is_browser) {
+		socket.onmessage = (evt) => {
+			client.handleRequest(_abToBuffer(evt.data));	// Browser ArrayBuffer to node Buffer
+		};
 
-	socket.on('error', client.handleError.bind(client));
+		socket.onerror = client.handleError.bind(client);
 
-	socket.on('connect', client.handleConnect.bind(client));
+		socket.onclose = client.handleDisconnect.bind(client);
+
+		socket.onopen = client.handleConnect.bind(client);
+	}
+	else {
+		socket.on('message', (evt) => {
+			client.handleRequest(_abToBuffer(evt));	// Browser ArrayBuffer to node Buffer
+		});
+
+		socket.on('error', client.handleError.bind(client));
+
+		socket.on('connect', client.handleConnect.bind(client));
+
+		socket.on('close', client.handleDisconnect.bind(client));
+	}
 
 	return socket;
 }
