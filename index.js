@@ -7,22 +7,17 @@
 
 /* Requires ------------------------------------------------------------------*/
 
-var SocketIOClient = require('socket.io-client');
-var SocketIO;
-
-if (process.env.NODE_ENV !== 'browser') {
-	SocketIO = require('socket.io');
-}
-
+const ws = require('uws');
 
 /* Methods -------------------------------------------------------------------*/
 
 /**
  * Converts ArrayBuffers to Buffers (cycle)
+ * @private
  * @param {ArrayBuffer} ab The ArrayBuffer to convert
  * @returns {Buffer} The resulting Buffer
  */
-function abToBuffer(ab) {
+function _abToBuffer(ab) {
 	let buffer = new Buffer(ab.byteLength || ab.data.length);
 	let view = ab.data || new Uint8Array(ab);
 	for (let i = 0; i < buffer.length; i++) {
@@ -37,7 +32,7 @@ function abToBuffer(ab) {
  * @param {function} callback The success callback for the operation
  */
 function listen(server, callback) {
-	server.listener = SocketIO(server.options.port);
+	server.listener = new ws.Server(server.options.port);
 
 	server.listener.on('connection', server.handleRequest.bind(server));
 	server.listener.on('error', (err) => {
@@ -73,11 +68,12 @@ function stop(server, callback) {
  */
 function createSocket(client, socket) {
 	if (!socket) {
-		socket = SocketIOClient.connect(client.options.hostname+':'+client.options.port);
+		socket = new ws('ws://' + client.options.hostname + ':' + client.options.port);
 	}
 
 	socket.on('message', (evt) => {
-		client.handleRequest(abToBuffer(evt));	// Browser ArrayBuffer to node Buffer
+		console.log(evt);
+		client.handleRequest(_abToBuffer(evt));	// Browser ArrayBuffer to node Buffer
 	});
 
 	socket.on('error', client.handleError.bind(client));
@@ -101,9 +97,9 @@ function disconnect(client) {
 /* Exports -------------------------------------------------------------------*/
 
 module.exports = {
-	listen: listen,
-	send: send,
-	createSocket: createSocket,
-	stop: stop,
-	disconnect: disconnect
+	listen,
+	send,
+	createSocket,
+	stop,
+	disconnect
 };
