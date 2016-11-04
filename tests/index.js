@@ -1,18 +1,18 @@
 /**
- * Kalm test suite
+ * Kalm websockets test suite
  */
 
 'use strict';
 
 /* Requires ------------------------------------------------------------------*/
 
-var assert = require('chai').assert;
-var Kalm = require('kalm');
-var websocket = require('../index');
+const assert = require('chai').assert;
+const Kalm = require('kalm');
+const websocket = require('../index');
 
 /* Models --------------------------------------------------------------------*/
 
-var adapterFormat = {
+const adapterFormat = {
 	listen: function() {},
 	send: function() {},
 	stop: function() {},
@@ -22,30 +22,30 @@ var adapterFormat = {
 
 /* Suite ---------------------------------------------------------------------*/
 
-describe('Adapters', function() {
+describe('Adapters', () => {
 
-	describe('methods', function() {
-		it('register', function() {
+	describe('methods', () => {
+		it('register', () => {
 			Kalm.adapters.register('ws', websocket);
 		});
 
-		it('resolve', function() {
-			var ws_test = Kalm.adapters.resolve('ws');
+		it('resolve', () => {
+			let ws_test = Kalm.adapters.resolve('ws');
 			assert.isObject(ws_test, 'ws is not a valid adapter object');
 			allMembersTypeMatch(ws_test, adapterFormat);
 		});
 	});
 
-	describe('Smoke test', function() {
-		it('run ws + json', function(done) {
-			var server = new Kalm.Server({encoder: 'json', adapter:'ws', port:8000});
-			server.subscribe('test', function(data) {
+	describe('Smoke test', () => {
+		it('run ws + json', (done) => {
+			let server = new Kalm.Server({ adapter:'ws', port:8000 });
+			server.subscribe('test', (data) => {
 				assert.deepEqual(data, {foo:'bar'});
 				server.stop(done);
 			});
 
-			server.on('ready', function() {
-				var client = new Kalm.Client({encoder: 'json', adapter:'ws', port:8000, hostname:'http://0.0.0.0'});
+			server.on('ready', () => {
+				let client = new Kalm.Client({ adapter:'ws', port:8000 });
 				client.send('test', {foo:'bar'});
 			});
 		});
@@ -58,8 +58,8 @@ describe('Adapters', function() {
  * Checks that all properties are present and of the proper type
  */
 function allMembersTypeMatch(set1, model) {
-	for (var i in model) {
-		var type = typeof model[i];
+	for (let i in model) {
+		let type = typeof model[i];
 		assert.property(set1, i, 'property ' + i + ' is missing');
 		assert.typeOf(set1[i], type, 'property ' + i + ' should be ' + type);
 	}
