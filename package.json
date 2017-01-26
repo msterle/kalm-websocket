@@ -1,6 +1,6 @@
 {
   "name": "kalm-websocket",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A web-socket adapter for kalm",
   "main": "index.js",
   "scripts": {

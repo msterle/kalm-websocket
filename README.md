@@ -44,8 +44,8 @@ Using in your browser:
     
     Kalm.adapters.register('ws', ws);
 
-    let server = new Kalm.Server({
-	    hostname: 'http://127.0.0.1',	// Put your server addr
+    let client = new Kalm.Client({
+	    hostname: '127.0.0.1',	// Put your server addr
 	    port: 3000,
 	    adapter: 'ws',
 	    channels: {
@@ -55,4 +55,9 @@ Using in your browser:
 		  }
     });
 ```
-    
+
+## Building
+
+You may want to build an AMD compatible module via the `npm run build` command, or use the one made for you in the bin folder. Note that it is not minified.
+
+If anyone with good webpack and modern front-end development skills is intrested in helping me make this library UMD compatible, it would be **greatly appreciated!** 

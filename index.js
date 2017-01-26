@@ -7,9 +7,13 @@
 
 /* Requires ------------------------------------------------------------------*/
 
-const is_browser = (require('os').platform() === 'browser');
+const is_browser = (window !== undefined);
 
 const ws = (is_browser)?require('./lib/ws-browser'):require('uws');
+
+/* Local variables -----------------------------------------------------------*/
+
+const send_options = { binary: true };
 
 /* Methods -------------------------------------------------------------------*/
 
@@ -20,9 +24,10 @@ const ws = (is_browser)?require('./lib/ws-browser'):require('uws');
  * @returns {Buffer} The resulting Buffer
  */
 function _abToBuffer(ab) {
-	let buffer = new Buffer(ab.byteLength || ab.data.length);
+	let buffer = Buffer.allocUnsafe(ab.byteLength || ab.data.length);
 	let view = ab.data || new Uint8Array(ab);
-	for (let i = 0; i < buffer.length; i++) {
+	const len = buffer.length;
+	for (let i = 0; i < len; i++) {
 		buffer[i] = view[i];
 	}
 	return buffer;
@@ -49,9 +54,11 @@ function listen(server, callback) {
  * @param {Socket} socket The socket to use
  * @param {Buffer} payload The body of the request
  */
-function send(socket, payload) {
-	if (socket.sendBytes) socket.sendBytes(payload);
-	else socket.send(payload, { binary: true });
+function send(socket, payload, timestamp) {
+	if (socket && socket.sendBytes) socket.sendBytes(payload);
+	else {
+		if (socket) socket.send(payload, send_options);
+	}
 }
 
 /**
@@ -61,7 +68,7 @@ function send(socket, payload) {
  */
 function stop(server, callback) {
 	server.listener.close();
-	process.nextTick(callback);
+	setTimeout(callback, 0);
 }
 
 /**
@@ -72,7 +79,7 @@ function stop(server, callback) {
 function createSocket(client, socket) {
 	if (!socket) {
 		socket = new ws('ws://' + client.options.hostname + ':' + client.options.port);
-		if (is_browser) socket.binaryType = "arraybuffer";
+		if (is_browser) socket.binaryType = 'arraybuffer';
 	}
 
 	if (is_browser) {
@@ -108,7 +115,7 @@ function createSocket(client, socket) {
 function disconnect(client) {
 	if (client.socket && client.socket.disconnect) {
 		client.socket.disconnect();
-		process.nextTick(client.handleDisconnect.bind(client));
+		setTimeout(client.handleDisconnect.bind(client), 0);
 	}
 }
 
