@@ -1,6 +1,6 @@
 {
   "name": "kalm-websocket",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A websocket adapter for kalm",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/fed135/kalm-websocket#readme",
   "dependencies": {
-    "uws": "^0.11.0"
+    "uws": "^0.12.0"
   },
   "browser": "bin/kalm-websocket.min.js",
   "devDependencies": {

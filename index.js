@@ -7,7 +7,7 @@
 
 /* Requires ------------------------------------------------------------------*/
 
-const is_browser = (window !== undefined);
+const is_browser = (this.hasOwnProperty('Document'));
 
 const ws = (is_browser)?require('./lib/ws-browser'):require('uws');
 
