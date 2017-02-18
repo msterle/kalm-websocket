@@ -1,6 +1,6 @@
 {
   "name": "kalm-websocket",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A websocket adapter for kalm",
   "main": "index.js",
   "scripts": {
@@ -30,7 +30,7 @@
   "dependencies": {
     "uws": "^0.12.0"
   },
-  "browser": "bin/kalm-websocket.min.js",
+  "browser": "bin/kalm-websocket.js",
   "devDependencies": {
     "babel-loader": "^6.2.7",
     "babel-preset-es2015": "^6.18.0",

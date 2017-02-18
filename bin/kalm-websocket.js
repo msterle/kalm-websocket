@@ -1,4 +1,4 @@
-/* kalm-websocket v2.0.1 */
+/* kalm-websocket v2.0.3 */
 define("kalm-websocket", [], function() { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
