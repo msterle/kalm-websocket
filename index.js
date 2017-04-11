@@ -7,9 +7,8 @@
 
 /* Requires ------------------------------------------------------------------*/
 
-const is_browser = (this.hasOwnProperty('Document'));
-
-const ws = (is_browser)?require('./lib/ws-browser'):require('uws');
+const isBrowser = (typeof WebSocket !== 'undefined');
+const ws = isBrowser ? WebSocket : require('uws');
 
 /* Local variables -----------------------------------------------------------*/
 
@@ -52,9 +51,7 @@ function listen(handlers, options) {
  */
 function send(socket, payload) {
   if (socket.sendBytes) socket.sendBytes(payload);
-  else {
-    socket.send(payload, send_options);
-  }
+  else socket.send(payload, send_options);
 }
 
 /**
@@ -88,7 +85,7 @@ function getOrigin(socket) {
 }
 
 function attachSocket(socket, handlers) {
-  if (is_browser) {
+  if (isBrowser) {
     socket.onmessage = evt => handlers.handleRequest(_abToBuffer(evt.data));
     socket.onerror = handlers.handleError;
     socket.onclose = handlers.handleDisconnect;
