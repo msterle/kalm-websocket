@@ -23,7 +23,13 @@ const send_options = { binary: true };
  * @returns {Buffer} The resulting Buffer
  */
 function _abToBuffer(ab) {
-  return ab.data || new Uint8Array(ab);
+  let buffer = Buffer.allocUnsafe(ab.byteLength || ab.data.length);
+  let view = ab.data || new Uint8Array(ab);
+  const len = buffer.length;
+  for (let i = 0; i < len; i++) {
+    buffer[i] = view[i];
+  }
+  return buffer;
 }
 
 /**
@@ -65,7 +71,7 @@ function stop(server, callback) {
  */
 function createSocket(client) {
   const socket = new ws(`ws://${client.hostname}:${client.port}`);
-  if (!isBrowser) socket.binaryType = 'nodebuffer';
+  socket.binaryType = 'arraybuffer';
   socket.__pending = true;
 
   return socket;
