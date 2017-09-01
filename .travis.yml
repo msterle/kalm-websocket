@@ -1,4 +1,7 @@
 language: node_js
 node_js:
-  - "6.10"
-script: "npm run-script test"
+  - "8"
+  - "6"
+sudo: false
+cache: yarn
+script: "npm test"
