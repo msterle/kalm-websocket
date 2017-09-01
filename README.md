@@ -5,7 +5,7 @@ Websocket [transport](https://github.com/kalm/kalm.js/wiki/Transports) for [kalm
 ---
 
 [![kalm-websocket](https://img.shields.io/npm/v/kalm-websocket.svg)](https://www.npmjs.com/package/kalm-websocket)
-[![Node](https://img.shields.io/badge/node->%3D4.0-blue.svg)](https://nodejs.org)
+[![Node](https://img.shields.io/badge/node->%3D6.0-blue.svg)](https://nodejs.org)
 [![Build Status](https://travis-ci.org/kalm/kalm-websocket.svg?branch=master)](https://travis-ci.org/kalm/kalm-websocket)
 [![Dependencies Status](https://david-dm.org/kalm/kalm-websocket.svg)](https://www.npmjs.com/package/kalm-websocket)
 
