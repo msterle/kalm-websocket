@@ -39,7 +39,7 @@ function _abToBuffer(ab) {
  */
 function listen(handlers, options) {
   const listener = new ws.Server({ port: options.port });
-  listener.on('connection', handlers.handleConnection);
+  listener.on('connection', socket => handlers.handleConnection(socket, module.exports));
   listener.on('error', handlers.handleError);
   return Promise.resolve(listener);
 }
